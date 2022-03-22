@@ -59,7 +59,7 @@ namespace WebCRUD.API.Controllers
             }
 
             listProducts.Add(product);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK,listProducts.Last());
         }
         //Post List of product
         [HttpPost, Route("api/product/create")]
@@ -94,13 +94,12 @@ namespace WebCRUD.API.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Try again");
             }
-            productFromList.Id = product.Id;
             productFromList.Name = product.Name;
             productFromList.Price = product.Price;
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, productFromList);
         }
         //Delete by Id
-        [HttpDelete]
+        [HttpDelete,Route("api/product/delete/{id}")]
         public HttpResponseMessage DeleteProduct(int id)
         {
             var productFromList = listProducts.Find(x => x.Id == id);
@@ -109,7 +108,7 @@ namespace WebCRUD.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, $"Product with id= {id} not found");
             }
             listProducts.Remove(productFromList);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK,productFromList);
         }
     }
 }

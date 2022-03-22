@@ -126,8 +126,7 @@ namespace WebCRUD.API.Controllers
         }
 
         // DELETE api/values/delete/3
-        [HttpDelete]
-        [Route("api/customer/delete/{id}")]
+        [HttpDelete, Route("api/customer/delete/{id}")]        
         public HttpResponseMessage DeleteCustomerById(int id)
         {
             var customerFromList = listCustomers.Find(s => s.Id == id);
