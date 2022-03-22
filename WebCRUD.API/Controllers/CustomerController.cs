@@ -17,29 +17,46 @@ namespace WebCRUD.API.Controllers
         [Route("api/customer/insert")]
         public void InsertDataToList()
         {
-            listCustomers.Add(new CustomerModel { Id = 1, Name = "Danko", Lastname = "Nikšić" });
-            listCustomers.Add(new CustomerModel { Id = 2, Name = "Dino", Lastname = "Nikšić" });
-            listCustomers.Add(new CustomerModel { Id = 3, Name = "Dragan", Lastname = "Bogdanović" });
+            listCustomers.Add(new CustomerModel { Id = 1, Name = "Danko", Email = "Nikšić", Address = "", Phone = 11 });
+            listCustomers.Add(new CustomerModel { Id = 2, Name = "Dino", Email = "Nikšić" });
+            listCustomers.Add(new CustomerModel { Id = 3, Name = "Dragan", Email = "Bogdanović" });
         }
         // GET api/values
         [HttpGet]
         public HttpResponseMessage GetAllCustomers()
         {
             if (listCustomers.Count == 0)
-            { return Request.CreateResponse(HttpStatusCode.BadRequest, "No customers."); }
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "No customers.");
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, listCustomers);
 
         }
 
         // GET api/values/5
-        [HttpGet]
+        [HttpGet,Route("api/customer/{id}")]
         public HttpResponseMessage GetCustomerById(int id)
         {
             var customer = listCustomers.Find(s => s.Id == id);
 
             if (customer == null)
-            {return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found"); }
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, customer);
+        }
+        // GET api/values/Name
+        [HttpGet, Route("api/customer/name/{name}")]
+        public HttpResponseMessage GetCustomerByName(string name)
+        {
+            var customer = listCustomers.FindAll(s => (s.Name).ToLower() == name.ToLower());
+
+            if (customer.Count == 0)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {name} not found");
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, customer);
         }
@@ -49,12 +66,18 @@ namespace WebCRUD.API.Controllers
         public void CreateNewCustomer(CustomerModel customer)
         {
             if (customer == null)
-            { return; }
+            {
+                return;
+            }
 
             if (listCustomers.Count == 0)
-            { customer.Id = 1; }
+            {
+                customer.Id = 1;
+            }
             else
-            { customer.Id = listCustomers.Last().Id + 1; }
+            {
+                customer.Id = listCustomers.Last().Id + 1;
+            }
 
             listCustomers.Add(customer);
         }
@@ -64,14 +87,20 @@ namespace WebCRUD.API.Controllers
         public void CreateNewCustomers(List<CustomerModel> customers)
         {
             if (customers == null)
-            { return; }
+            {
+                return;
+            }
 
             foreach (var item in customers)
             {
                 if (listCustomers.Count == 0)
-                { item.Id = 1; }
+                {
+                    item.Id = 1;
+                }
                 else
-                { item.Id = listCustomers.Last().Id + 1; }
+                {
+                    item.Id = listCustomers.Last().Id + 1;
+                }
 
                 listCustomers.Add(item);
             }
@@ -82,12 +111,16 @@ namespace WebCRUD.API.Controllers
         public HttpResponseMessage EditCustomerById(CustomerModel customer)
         {
             var customerFromList = listCustomers.Find(s => s.Id == customer.Id);
-            
+
             if (customerFromList == null)
-            { return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {customer.Id} not found"); }
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {customer.Id} not found");
+            }
 
             customerFromList.Name = customer.Name;
-            customerFromList.Lastname = customer.Lastname;
+            customerFromList.Email = customer.Email;
+            customerFromList.Address = customer.Address;
+            customerFromList.Phone = customer.Phone;
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -100,7 +133,9 @@ namespace WebCRUD.API.Controllers
             var customerFromList = listCustomers.Find(s => s.Id == id);
 
             if (customerFromList == null)
-            { Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found"); }
+            {
+                Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found");
+            }
 
             listCustomers.Remove(customerFromList);
 
