@@ -1,0 +1,57 @@
+CREATE TABLE Product (
+    Id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    Name varchar(255),    
+    Price int
+	);
+CREATE TABLE Customer (
+    Id int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    Name varchar(255),
+    Email varchar(255),
+    Address varchar(255),
+    Phone int	  
+	);
+CREATE TABLE ProductCustomer (
+	CustomerId int not null,
+	ProductId int not null,
+    FOREIGN KEY (CustomerId) REFERENCES Customer(Id),
+    FOREIGN KEY (ProductId) REFERENCES Product(Id)  
+    );
+
+insert into Customer(name,email,address,phone)
+values 
+('Danko','danko@gmail','Osijek','156161'),
+('Dejan','danko@gmail','Osijek','156161'),
+('Dino','danko@gmail','Osijek','156161'),
+('Dragan','danko@gmail','Osijek','156161');
+
+insert into Product(Name,Price)
+values 
+('Kruh',10),
+('Kifla',2),
+('Perec',3),
+('Jogurt',11),
+('Burek',15),
+('Mlijeko',12);
+
+insert into ProductCustomer(CustomerId,ProductId)
+values 
+(1,1),
+(1,2),
+(3,5),
+(2,4),
+(3,1),
+(1,4),
+(1,3),
+(3,2),
+(2,2),
+(3,4),
+(2,3);
+
+Select * from Customer
+Select * from Product
+
+SELECT *
+FROM ((Customer
+INNER JOIN ProductCustomer ON Customer.Id = ProductCustomer.CustomerId)
+INNER JOIN Product ON Product.Id = ProductCustomer.ProductId)
+WHERE Product.Name='Kruh';
