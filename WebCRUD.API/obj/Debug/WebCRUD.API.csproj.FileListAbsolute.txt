@@ -85,8 +85,6 @@ C:\Users\HT-ICT\Desktop\OOP\WebApplication\WebCRUD.API\obj\Debug\WebCRUD.API.dll
 C:\Users\HT-ICT\Desktop\OOP\WebApplication\WebCRUD.API\obj\Debug\WebCRUD.API.pdb
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.csproj.AssemblyReference.cache
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.csproj.CoreCompileInputs.cache
-C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.dll
-C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.pdb
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.API.dll.config
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.API.dll
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.API.pdb
@@ -168,3 +166,15 @@ C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\System.Web.WebPages.Razo
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\Antlr3.Runtime.pdb
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.csproj.CopyComplete
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\obj\Debug\WebCRUD.API.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Model.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Service.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Service.Common.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Repository.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Repository.Common.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Model.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Service.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Service.Common.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Repository.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.API\bin\WebCRUD.Repository.Common.pdb

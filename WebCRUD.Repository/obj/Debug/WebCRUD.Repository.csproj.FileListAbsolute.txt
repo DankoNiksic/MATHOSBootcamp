@@ -1,0 +1,11 @@
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\obj\Debug\WebCRUD.Repository.csproj.AssemblyReference.cache
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\obj\Debug\WebCRUD.Repository.csproj.CoreCompileInputs.cache
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Repository.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Repository.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Model.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Repository.Common.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Model.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\bin\Debug\WebCRUD.Repository.Common.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\obj\Debug\WebCRUD.Repository.csproj.CopyComplete
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\obj\Debug\WebCRUD.Repository.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Repository\obj\Debug\WebCRUD.Repository.pdb

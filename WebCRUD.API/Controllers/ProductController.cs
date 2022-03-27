@@ -1,114 +1,195 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WebCRUD.API.Models;
+using WebCRUD.Model;
+using WebCRUD.Service;
 
 namespace WebCRUD.API.Controllers
 {
     public class ProductController : ApiController
     {
-        public static List<ProductModel> listProducts = new List<ProductModel>();
 
         //Get all products - api/product/
         [HttpGet]
         public HttpResponseMessage GetAllProducts()
         {
-            if (listProducts.Count == 0)
+            ProductService productService = new ProductService();
+            List<ProductModelEntity> products;
+            List<ProductRest> listproductsrest = new List<ProductRest>();
+                        
+            products = productService.GetAllProducts();
+
+            foreach (var item in products)
+            {
+                ProductRest productrest = new ProductRest
+                {
+                    Name = item.Name,
+                    Price = item.Price
+                };
+                listproductsrest.Add(productrest);
+            }
+            if (products == null)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Products not found");
             }
-
-            return Request.CreateResponse(HttpStatusCode.OK, listProducts);
+            return Request.CreateResponse(HttpStatusCode.OK, listproductsrest);
         }
 
         //Get by Id - api/product/
-        [HttpGet,Route("api/product/{id}")]
-        public HttpResponseMessage GetAllProducts(int id)
+        [HttpGet, Route("api/product/{id}")]
+        public HttpResponseMessage GetProductById(int id)
         {
-            var products = listProducts.Find(p => p.Id == id);
+            ProductService productService = new ProductService();
+            ProductModelEntity products;
+
+            products = productService.GetProductById(id);
+
+            ProductRest productrest = new ProductRest
+            {
+                Name = products.Name,
+                Price = products.Price
+            };
+
             if (products == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Product with id= {id} not found");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Products not found");
             }
-            return Request.CreateResponse(HttpStatusCode.OK, products);
+            return Request.CreateResponse(HttpStatusCode.OK, productrest);
         }
 
         // GET api/values/Name
         [HttpGet, Route("api/product/name/{name}")]
         public HttpResponseMessage GetProductByName(string name)
         {
-            var customer = listProducts.FindAll(s => (s.Name).ToLower() == name.ToLower());
+            ProductService productService = new ProductService();
+            ProductModelEntity products;
 
-            if (customer.Count == 0)
+            products = productService.GetProductByName(name);
+
+            ProductRest productrest = new ProductRest
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Product {name} not found");
-            }
+                Name = products.Name,
+                Price = products.Price
+            };
 
-            return Request.CreateResponse(HttpStatusCode.OK, customer);
-        }
-        //Post api/product/
-        [HttpPost]
-        public HttpResponseMessage CreateNewProduct(ProductModel product)
-        {
-            if (product == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Try again");
-            }
-
-            listProducts.Add(product);
-            return Request.CreateResponse(HttpStatusCode.OK,listProducts.Last());
-        }
-        //Post List of product
-        [HttpPost, Route("api/product/create")]
-        public HttpResponseMessage CreateNewProducts(List<ProductModel> products)
-        {
             if (products == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Try again");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Products not found");
             }
+            return Request.CreateResponse(HttpStatusCode.OK, productrest);
+        }
 
+        //Post api/product/
+        [HttpPost]
+        public HttpResponseMessage CreateNewProduct(ProductRest product)
+        {
+
+            if (product == null || product.Name == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
+            }
+            ProductService productService = new ProductService();
+
+            ProductModelEntity productEntity = new ProductModelEntity
+            {
+                Name = product.Name,
+                Price = product.Price
+            };
+            try
+            {
+                productService.CreateNewProduct(productEntity);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, product);
+        }
+
+        //Post List of products
+        [HttpPost, Route("api/product/create")]
+        public HttpResponseMessage CreateNewProducts(List<ProductRest> products)
+        {
+            List<ProductModelEntity> productsEntity = new List<ProductModelEntity>();
             foreach (var item in products)
             {
-                if (listProducts.Count == 0)
+                ProductModelEntity model = new ProductModelEntity
                 {
-                    item.Id = 1;
-                }
-                else
-                {
-                    item.Id = listProducts.Last().Id + 1;
-                }
-                listProducts.Add(item);
+                    Name = item.Name,
+                    Price = item.Price
+
+                };
+                productsEntity.Add(model);
+            }
+            ProductService productService = new ProductService();
+            productService.CreateNewProducts(productsEntity);
+            return Request.CreateResponse(HttpStatusCode.OK, products);
+        }
+
+
+        //Put by Id
+        [HttpPut, Route("api/product/{id}")]
+        public HttpResponseMessage EditProduct([FromUri] int id, ProductRest product)
+        {
+            ProductService productService = new ProductService();
+
+            if (product == null || product.Name == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
+            }
+
+            if (!productService.CheckId(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
+
+            ProductModelEntity productEntity = new ProductModelEntity
+            {
+                Id = id,
+                Name = product.Name,
+                Price = product.Price
+            };
+
+            try
+            {
+                productService.EditProduct(productEntity);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, product);
+        }
+        //Delete by Id
+        [HttpDelete, Route("api/product/delete/{id}")]
+        public HttpResponseMessage DeleteProduct(int id)
+        {
+            ProductService productService = new ProductService();
+            if (!productService.CheckId(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
+            try
+            {
+                productService.DeleteProduct(id);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Product is used by other table");
             }
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        //Put by Id
-        [HttpPut]
-        public HttpResponseMessage EditProduct(ProductModel product)
-        {
-            var productFromList = listProducts.Find(x => x.Id == product.Id);
-            if (productFromList == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Try again");
-            }
-            productFromList.Name = product.Name;
-            productFromList.Price = product.Price;
-            return Request.CreateResponse(HttpStatusCode.OK, productFromList);
-        }
-        //Delete by Id
-        [HttpDelete,Route("api/product/delete/{id}")]
-        public HttpResponseMessage DeleteProduct(int id)
-        {
-            var productFromList = listProducts.Find(x => x.Id == id);
-            if (productFromList == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Product with id= {id} not found");
-            }
-            listProducts.Remove(productFromList);
-            return Request.CreateResponse(HttpStatusCode.OK,productFromList);
-        }
     }
+    public class ProductRest
+    {
+        public string Name { get; set; }
+        public int Price { get; set; }
+    }
+
 }

@@ -155,7 +155,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
@@ -247,6 +246,19 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebCRUD.Model\WebCRUD.Model.csproj">
+      <Project>{755BC170-41C5-41D4-83F6-B049A07949AC}</Project>
+      <Name>WebCRUD.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebCRUD.Service\WebCRUD.Service.csproj">
+      <Project>{6732d774-7373-4da2-8452-311aa817ad55}</Project>
+      <Name>WebCRUD.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

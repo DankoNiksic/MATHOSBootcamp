@@ -1,145 +1,207 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebCRUD.API.Models;
+using WebCRUD.Model;
+using WebCRUD.Service;
 
 namespace WebCRUD.API.Controllers
 {
     public class CustomerController : ApiController
     {
-
-        public static List<CustomerModel> listCustomers = new List<CustomerModel>();
-
-        [HttpGet]
-        [Route("api/customer/insert")]
-        public void InsertDataToList()
-        {
-            listCustomers.Add(new CustomerModel { Id = 1, Name = "Danko", Email = "Nikšić", Address = "", Phone = 11 });
-            listCustomers.Add(new CustomerModel { Id = 2, Name = "Dino", Email = "Nikšić" });
-            listCustomers.Add(new CustomerModel { Id = 3, Name = "Dragan", Email = "Bogdanović" });
-        }
-        // GET api/values
+        //Get all customers - api/customer/
         [HttpGet]
         public HttpResponseMessage GetAllCustomers()
         {
-            if (listCustomers.Count == 0)
+            CustomerService customerService = new CustomerService();
+            List<CustomerModelEntity> customers;
+            List<CustomerRest> listcustomersrest = new List<CustomerRest>();
+
+            customers = customerService.GetAllCustomers();
+
+            foreach (var item in customers)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "No customers.");
+                CustomerRest customerrest = new CustomerRest
+                {
+                    
+                    Name = item.Name,
+                    Email = item.Email,
+                    Address = item.Address,
+                    Phone = item.Phone
+                };
+                listcustomersrest.Add(customerrest);
             }
-
-            return Request.CreateResponse(HttpStatusCode.OK, listCustomers);
-
+            if (customers == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, listcustomersrest);
         }
 
-        // GET api/values/5
-        [HttpGet,Route("api/customer/{id}")]
+        //Get by Id - api/customer/
+        [HttpGet, Route("api/customer/{id}")]
         public HttpResponseMessage GetCustomerById(int id)
         {
-            var customer = listCustomers.Find(s => s.Id == id);
+            CustomerService customerService = new CustomerService();
+            CustomerModelEntity customers;
 
-            if (customer == null)
+            customers = customerService.GetCustomerById(id);
+
+            CustomerRest customerrest = new CustomerRest
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found");
-            }
+                Name = customers.Name,
+                Email=customers.Email,
+                Address=customers.Address,
+                Phone=customers.Phone
+            };
 
-            return Request.CreateResponse(HttpStatusCode.OK, customer);
+            if (customers == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, customerrest);
         }
+
         // GET api/values/Name
         [HttpGet, Route("api/customer/name/{name}")]
         public HttpResponseMessage GetCustomerByName(string name)
         {
-            var customer = listCustomers.FindAll(s => (s.Name).ToLower() == name.ToLower());
+            CustomerService customerService = new CustomerService();
+            CustomerModelEntity customers;
 
-            if (customer.Count == 0)
+            customers = customerService.GetCustomerByName(name);
+
+            CustomerRest customerrest = new CustomerRest
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {name} not found");
-            }
+                Name = customers.Name,
+                Email = customers.Email,
+                Address = customers.Address,
+                Phone = customers.Phone
+            };
 
+            if (customers == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, customerrest);
+        }
+
+        //Post api/customer/
+        [HttpPost]
+        public HttpResponseMessage CreateNewCustomer(CustomerRest customer)
+        {
+
+            if (customer == null || customer.Name == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
+            }
+            CustomerModelEntity customerEntity = new CustomerModelEntity
+            {
+                Name = customer.Name,
+                Email= customer.Email,
+                Address= customer.Address,
+                Phone= customer.Phone
+            };
+
+            CustomerService customerService = new CustomerService();
+            try
+            {
+                customerService.CreateNewCustomer(customerEntity);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
+            }
             return Request.CreateResponse(HttpStatusCode.OK, customer);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void CreateNewCustomer(CustomerModel customer)
+        //Post List of customers
+        [HttpPost, Route("api/customer/create")]
+        public HttpResponseMessage CreateNewCustomers(List<CustomerRest> customers)
         {
-            if (customer == null)
-            {
-                return;
-            }
-
-            if (listCustomers.Count == 0)
-            {
-                customer.Id = 1;
-            }
-            else
-            {
-                customer.Id = listCustomers.Last().Id + 1;
-            }
-
-            listCustomers.Add(customer);
-        }
-        // POST api/values
-        [HttpPost]
-        [Route("api/customer/create")]
-        public void CreateNewCustomers(List<CustomerModel> customers)
-        {
-            if (customers == null)
-            {
-                return;
-            }
-
+            List<CustomerModelEntity> customersEntity = new List<CustomerModelEntity>();
             foreach (var item in customers)
             {
-                if (listCustomers.Count == 0)
-                {
-                    item.Id = 1;
-                }
-                else
-                {
-                    item.Id = listCustomers.Last().Id + 1;
-                }
+                CustomerModelEntity model = new CustomerModelEntity
+                {                    
+                    Name = item.Name,
+                    Email = item.Email,
+                    Address = item.Address,
+                    Phone = item.Phone
 
-                listCustomers.Add(item);
+                };
+                customersEntity.Add(model);
             }
+            CustomerService customerService = new CustomerService();
+            customerService.CreateNewCustomers(customersEntity);
+            return Request.CreateResponse(HttpStatusCode.OK, customers);
         }
 
-        // PUT api/values
-        [HttpPut]
-        public HttpResponseMessage EditCustomerById(CustomerModel customer)
-        {
-            var customerFromList = listCustomers.Find(s => s.Id == customer.Id);
 
-            if (customerFromList == null)
+        //Put by Id
+        [HttpPut, Route("api/customer/{id}")]
+        public HttpResponseMessage EditCustomer([FromUri] int id, CustomerRest customer)
+        {
+            CustomerService customerService = new CustomerService();
+
+            if (customer == null || customer.Name == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {customer.Id} not found");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
             }
 
-            customerFromList.Name = customer.Name;
-            customerFromList.Email = customer.Email;
-            customerFromList.Address = customer.Address;
-            customerFromList.Phone = customer.Phone;
+            if (!customerService.CheckId(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
 
+            CustomerModelEntity customerEntity = new CustomerModelEntity
+            {
+                Id = id,
+                Name = customer.Name,
+                Email=customer.Email,
+                Address=customer.Address,
+                Phone=customer.Phone
+            };
+
+            try
+            {
+                customerService.EditCustomer(customerEntity);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Error");
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, customer);
+        }
+        //Delete by Id
+        [HttpDelete, Route("api/customer/delete/{id}")]
+        public HttpResponseMessage DeleteCustomer(int id)
+        {
+            CustomerService customerService = new CustomerService();
+            if (!customerService.CheckId(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
+            try
+            {
+                customerService.DeleteCustomer(id);
+            }
+            catch (Exception)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Customer is used by other table");
+            }
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-
-        // DELETE api/values/delete/3
-        [HttpDelete, Route("api/customer/delete/{id}")]        
-        public HttpResponseMessage DeleteCustomerById(int id)
-        {
-            var customerFromList = listCustomers.Find(s => s.Id == id);
-
-            if (customerFromList == null)
-            {
-                Request.CreateResponse(HttpStatusCode.BadRequest, $"Customer {id} not found");
-            }
-
-            listCustomers.Remove(customerFromList);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
+    }
+    public class CustomerRest
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public int Phone { get; set; }
     }
 }

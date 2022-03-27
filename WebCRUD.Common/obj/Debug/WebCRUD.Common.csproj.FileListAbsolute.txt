@@ -1,0 +1,6 @@
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\bin\Debug\WebCRUD.Common.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\bin\Debug\WebCRUD.Common.pdb
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\obj\Debug\WebCRUD.Common.csproj.AssemblyReference.cache
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\obj\Debug\WebCRUD.Common.csproj.CoreCompileInputs.cache
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\obj\Debug\WebCRUD.Common.dll
+C:\Users\HT-ICT\Desktop\OOP\WebAPI_CRUD\WebCRUD.Common\obj\Debug\WebCRUD.Common.pdb
