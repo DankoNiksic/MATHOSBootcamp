@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebCRUD.Model;
 using WebCRUD.Service;
@@ -16,13 +17,13 @@ namespace WebCRUD.API.Controllers
 
         //Get all products - api/product/
         [HttpGet]
-        public HttpResponseMessage GetAllProducts()
+        public async Task<HttpResponseMessage> GetAllProductsAsync()
         {
             ProductService productService = new ProductService();
             List<ProductModelEntity> products;
             List<ProductRest> listproductsrest = new List<ProductRest>();
                         
-            products = productService.GetAllProducts();
+            products = await productService.GetAllProductsAsync();
 
             foreach (var item in products)
             {
@@ -42,12 +43,12 @@ namespace WebCRUD.API.Controllers
 
         //Get by Id - api/product/
         [HttpGet, Route("api/product/{id}")]
-        public HttpResponseMessage GetProductById(int id)
+        public async Task<HttpResponseMessage> GetProductByIdAsync(int id)
         {
             ProductService productService = new ProductService();
             ProductModelEntity products;
 
-            products = productService.GetProductById(id);
+            products =await productService.GetProductByIdAsync(id);
 
             ProductRest productrest = new ProductRest
             {
@@ -64,12 +65,12 @@ namespace WebCRUD.API.Controllers
 
         // GET api/values/Name
         [HttpGet, Route("api/product/name/{name}")]
-        public HttpResponseMessage GetProductByName(string name)
+        public async Task<HttpResponseMessage> GetProductByNameAsync(string name)
         {
             ProductService productService = new ProductService();
             ProductModelEntity products;
 
-            products = productService.GetProductByName(name);
+            products =await productService.GetProductByNameAsync(name);
 
             ProductRest productrest = new ProductRest
             {
@@ -86,7 +87,7 @@ namespace WebCRUD.API.Controllers
 
         //Post api/product/
         [HttpPost]
-        public HttpResponseMessage CreateNewProduct(ProductRest product)
+        public async Task<HttpResponseMessage> CreateNewProductAsync(ProductRest product)
         {
 
             if (product == null || product.Name == null)
@@ -102,7 +103,7 @@ namespace WebCRUD.API.Controllers
             };
             try
             {
-                productService.CreateNewProduct(productEntity);
+               await productService.CreateNewProductAsync(productEntity);
             }
             catch (Exception)
             {
@@ -113,7 +114,7 @@ namespace WebCRUD.API.Controllers
 
         //Post List of products
         [HttpPost, Route("api/product/create")]
-        public HttpResponseMessage CreateNewProducts(List<ProductRest> products)
+        public async Task<HttpResponseMessage> CreateNewProductsAsync(List<ProductRest> products)
         {
             List<ProductModelEntity> productsEntity = new List<ProductModelEntity>();
             foreach (var item in products)
@@ -127,14 +128,14 @@ namespace WebCRUD.API.Controllers
                 productsEntity.Add(model);
             }
             ProductService productService = new ProductService();
-            productService.CreateNewProducts(productsEntity);
+           await productService.CreateNewProductsAsync(productsEntity);
             return Request.CreateResponse(HttpStatusCode.OK, products);
         }
 
 
         //Put by Id
         [HttpPut, Route("api/product/{id}")]
-        public HttpResponseMessage EditProduct([FromUri] int id, ProductRest product)
+        public async Task<HttpResponseMessage> EditProduct([FromUri] int id, ProductRest product)
         {
             ProductService productService = new ProductService();
 
@@ -143,7 +144,7 @@ namespace WebCRUD.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
             }
 
-            if (!productService.CheckId(id))
+            if (! await( productService.CheckIdAsync(id)))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
             }
@@ -157,7 +158,7 @@ namespace WebCRUD.API.Controllers
 
             try
             {
-                productService.EditProduct(productEntity);
+               await productService.EditProductAsync(productEntity);
             }
             catch (Exception)
             {
@@ -167,16 +168,16 @@ namespace WebCRUD.API.Controllers
         }
         //Delete by Id
         [HttpDelete, Route("api/product/delete/{id}")]
-        public HttpResponseMessage DeleteProduct(int id)
+        public async Task<HttpResponseMessage> DeleteProduct(int id)
         {
             ProductService productService = new ProductService();
-            if (!productService.CheckId(id))
+            if (! await( productService.CheckIdAsync(id)))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
             }
             try
             {
-                productService.DeleteProduct(id);
+               await productService.DeleteProductAsync(id);
             }
             catch (Exception)
             {

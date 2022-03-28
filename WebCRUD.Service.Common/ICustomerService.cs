@@ -9,13 +9,13 @@ namespace WebCRUD.Service.Common
 {
     public interface ICustomerService
     {
-        List<CustomerModelEntity> GetAllCustomers();
-        CustomerModelEntity GetCustomerById(int id);
-        CustomerModelEntity GetCustomerByName(string name);
-        void CreateNewCustomer(CustomerModelEntity customer);
-        void CreateNewCustomers(List<CustomerModelEntity> customer);
-        void EditCustomer(CustomerModelEntity customer);
-        void DeleteCustomer(int id);
-        bool CheckId(int id);
+        Task<List<CustomerModelEntity>> GetAllCustomersAsync();
+        Task<CustomerModelEntity> GetCustomerByIdAsync(int id);
+        Task<CustomerModelEntity> GetCustomerByNameAsync(string name);
+        Task CreateNewCustomerAsync(CustomerModelEntity customer);
+        Task CreateNewCustomersAsync(List<CustomerModelEntity> customer);
+        Task EditCustomerAsync(CustomerModelEntity customer);
+        Task DeleteCustomerAsync(int id);
+        Task <bool> CheckIdAsync(int id);
     }
 }

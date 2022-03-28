@@ -10,53 +10,52 @@ using WebCRUD.Service.Common;
 namespace WebCRUD.Service
 {
     public class ProductService:IProductService
-    {       
-        public List<ProductModelEntity> GetAllProducts()
+    {
+        public async Task<List<ProductModelEntity>> GetAllProductsAsync()
         {
             ProductRepository productRepository = new ProductRepository();
-            var product =productRepository.GetAllProduct();
+            var product = await productRepository.GetAllProductAsync();
             return product;
         }
-        public ProductModelEntity GetProductById(int id)
+        public async Task<ProductModelEntity> GetProductByIdAsync(int id)
         {
             ProductRepository productRepository = new ProductRepository();
-            return productRepository.GetProductById(id);            
+            return await productRepository.GetProductByIdAsync(id);
         }
-        public ProductModelEntity GetProductByName(string name)
+        public async Task<ProductModelEntity> GetProductByNameAsync(string name)
         {
             ProductRepository productRepository = new ProductRepository();
-            return productRepository.GetProductByName(name);
+            return await productRepository.GetProductByNameAsync(name);
         }
-        public void CreateNewProduct(ProductModelEntity product)
+        public async Task CreateNewProductAsync(ProductModelEntity product)
         {
             ProductRepository productRepository = new ProductRepository();
-             productRepository.CreateNewProduct(product);
-            
-        }
-        public void CreateNewProducts(List<ProductModelEntity> product)
-        {
-            ProductRepository productRepository = new ProductRepository();
-            productRepository.CreateNewProducts(product);
+            await productRepository.CreateNewProductAsync(product);
 
         }
-        public void EditProduct(ProductModelEntity product)
+        public async Task CreateNewProductsAsync(List<ProductModelEntity> product)
         {
             ProductRepository productRepository = new ProductRepository();
-            productRepository.EditProduct(product);
+            await productRepository.CreateNewProductsAsync(product);
 
         }
-        public void DeleteProduct(int id)
+        public async Task EditProductAsync(ProductModelEntity product)
         {
             ProductRepository productRepository = new ProductRepository();
-            productRepository.DeleteProduct(id);
+            await productRepository.EditProductAsync(product);
 
         }
-        public bool CheckId(int id)
+        public async Task DeleteProductAsync(int id)
         {
             ProductRepository productRepository = new ProductRepository();
-          return productRepository.CheckId(id);
+            await productRepository.DeleteProductAsync(id);
+
         }
-        
+        public async Task<bool> CheckIdAsync(int id)
+        {
+            ProductRepository productRepository = new ProductRepository();
+            return await productRepository.CheckIdAsync(id);
+        }
 
     }
 }

@@ -9,13 +9,13 @@ namespace WebCRUD.Repository.Common
 {
     public interface IProductRepository
     {
-        List<ProductModelEntity> GetAllProduct();
-        ProductModelEntity GetProductById(int id);
-        ProductModelEntity GetProductByName(string name);
-        void CreateNewProduct(ProductModelEntity product);
-        void CreateNewProducts(List<ProductModelEntity> product);
-        void EditProduct(ProductModelEntity product);
-        void DeleteProduct(int id);
-        bool CheckId(int id);
+        Task<List<ProductModelEntity>> GetAllProductAsync();
+        Task<ProductModelEntity> GetProductByIdAsync(int id);
+        Task<ProductModelEntity> GetProductByNameAsync(string name);
+        Task CreateNewProductAsync(ProductModelEntity product);
+        Task CreateNewProductsAsync(List<ProductModelEntity> product);
+        Task EditProductAsync(ProductModelEntity product);
+        Task DeleteProductAsync(int id);
+        Task<bool> CheckIdAsync(int id);
     }
 }

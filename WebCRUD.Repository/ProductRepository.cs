@@ -14,7 +14,7 @@ namespace WebCRUD.Repository
         static string connectionString = @"Data Source=localhost\SQLEXPRESS01;Initial Catalog=WebAPI_CRUD;Integrated Security=True";
 
         public List<ProductModelEntity> listProducts = new List<ProductModelEntity>();
-        public List<ProductModelEntity> GetAllProduct()
+        public async Task<List<ProductModelEntity>> GetAllProductAsync()
         {
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -25,7 +25,7 @@ namespace WebCRUD.Repository
                     );
                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = await command.ExecuteReaderAsync();
 
                 if (reader.HasRows)
                 {
@@ -45,7 +45,7 @@ namespace WebCRUD.Repository
             }
             return listProducts;
         }
-        public ProductModelEntity GetProductById(int id)
+        public async  Task<ProductModelEntity> GetProductByIdAsync(int id)
         {
 
             var connection = new SqlConnection(connectionString);
@@ -56,7 +56,7 @@ namespace WebCRUD.Repository
                     );
                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = await command.ExecuteReaderAsync();
                 ProductModelEntity model = new ProductModelEntity();
                 if (reader.HasRows)
                 {
@@ -72,7 +72,7 @@ namespace WebCRUD.Repository
                 return model;
             }
         }
-        public ProductModelEntity GetProductByName(string name)
+        public async Task<ProductModelEntity> GetProductByNameAsync(string name)
         {
 
             var connection = new SqlConnection(connectionString);
@@ -83,7 +83,7 @@ namespace WebCRUD.Repository
                     );
                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader =await command.ExecuteReaderAsync();
                 ProductModelEntity model = new ProductModelEntity();
                 if (reader.HasRows)
                 {
@@ -99,7 +99,7 @@ namespace WebCRUD.Repository
                 return model;
             }
         }
-        public void CreateNewProduct(ProductModelEntity product)
+        public async Task CreateNewProductAsync(ProductModelEntity product)
         {
             SqlDataAdapter adapter = new SqlDataAdapter();
             var connection = new SqlConnection(connectionString);
@@ -110,12 +110,12 @@ namespace WebCRUD.Repository
                 connection.Open();
 
                 adapter.InsertCommand = new SqlCommand(sql, connection);
-                adapter.InsertCommand.ExecuteNonQuery();
+               await adapter.InsertCommand.ExecuteNonQueryAsync();
 
                 connection.Close();
             }
         }
-        public void CreateNewProducts(List<ProductModelEntity> product)
+        public async Task CreateNewProductsAsync(List<ProductModelEntity> product)
         {
             SqlDataAdapter adapter = new SqlDataAdapter();
             var connection = new SqlConnection(connectionString);
@@ -130,12 +130,12 @@ namespace WebCRUD.Repository
                 connection.Open();
 
                 adapter.InsertCommand = new SqlCommand(sql, connection);
-                adapter.InsertCommand.ExecuteNonQuery();
+               await adapter.InsertCommand.ExecuteNonQueryAsync();
 
                 connection.Close();
             }
         }
-        public void EditProduct(ProductModelEntity product)
+        public async Task EditProductAsync(ProductModelEntity product)
         {
             SqlDataAdapter adapter = new SqlDataAdapter();
             var connection = new SqlConnection(connectionString);
@@ -147,12 +147,12 @@ namespace WebCRUD.Repository
 
                 adapter.UpdateCommand = connection.CreateCommand();
                 adapter.UpdateCommand.CommandText = sql;
-                adapter.UpdateCommand.ExecuteNonQuery();
+               await adapter.UpdateCommand.ExecuteNonQueryAsync();
 
                 connection.Close();
             }
         }
-        public void DeleteProduct(int id)
+        public async Task DeleteProductAsync(int id)
         {
             SqlDataAdapter adapter = new SqlDataAdapter();
             var connection = new SqlConnection(connectionString);
@@ -164,12 +164,12 @@ namespace WebCRUD.Repository
 
                 adapter.DeleteCommand = connection.CreateCommand();
                 adapter.DeleteCommand.CommandText = sql;
-                adapter.DeleteCommand.ExecuteNonQuery();
+               await adapter.DeleteCommand.ExecuteNonQueryAsync();
 
                 connection.Close();
             }
         }
-        public bool CheckId(int id)
+        public async Task<bool> CheckIdAsync(int id)
         {
             var connection = new SqlConnection(connectionString);
             bool checkId;
@@ -180,7 +180,7 @@ namespace WebCRUD.Repository
                     );
                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader =await command.ExecuteReaderAsync();
 
                 if (!reader.HasRows)
                 {

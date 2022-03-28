@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebCRUD.API.Models;
 using WebCRUD.Model;
@@ -15,13 +16,13 @@ namespace WebCRUD.API.Controllers
     {
         //Get all customers - api/customer/
         [HttpGet]
-        public HttpResponseMessage GetAllCustomers()
+        public async Task<HttpResponseMessage> GetAllCustomersAsync()
         {
             CustomerService customerService = new CustomerService();
             List<CustomerModelEntity> customers;
             List<CustomerRest> listcustomersrest = new List<CustomerRest>();
 
-            customers = customerService.GetAllCustomers();
+            customers = await customerService.GetAllCustomersAsync();
 
             foreach (var item in customers)
             {
@@ -44,12 +45,12 @@ namespace WebCRUD.API.Controllers
 
         //Get by Id - api/customer/
         [HttpGet, Route("api/customer/{id}")]
-        public HttpResponseMessage GetCustomerById(int id)
+        public async Task<HttpResponseMessage> GetCustomerByIdAsync(int id)
         {
             CustomerService customerService = new CustomerService();
             CustomerModelEntity customers;
 
-            customers = customerService.GetCustomerById(id);
+             customers =await customerService.GetCustomerByIdAsync(id);
 
             CustomerRest customerrest = new CustomerRest
             {
@@ -68,12 +69,12 @@ namespace WebCRUD.API.Controllers
 
         // GET api/values/Name
         [HttpGet, Route("api/customer/name/{name}")]
-        public HttpResponseMessage GetCustomerByName(string name)
+        public async Task<HttpResponseMessage> GetCustomerByNameAsync(string name)
         {
             CustomerService customerService = new CustomerService();
             CustomerModelEntity customers;
 
-            customers = customerService.GetCustomerByName(name);
+            customers =await customerService.GetCustomerByNameAsync(name);
 
             CustomerRest customerrest = new CustomerRest
             {
@@ -92,7 +93,7 @@ namespace WebCRUD.API.Controllers
 
         //Post api/customer/
         [HttpPost]
-        public HttpResponseMessage CreateNewCustomer(CustomerRest customer)
+        public async Task<HttpResponseMessage> CreateNewCustomerAsync(CustomerRest customer)
         {
 
             if (customer == null || customer.Name == null)
@@ -110,7 +111,7 @@ namespace WebCRUD.API.Controllers
             CustomerService customerService = new CustomerService();
             try
             {
-                customerService.CreateNewCustomer(customerEntity);
+               await customerService.CreateNewCustomerAsync(customerEntity);
             }
             catch (Exception)
             {
@@ -121,7 +122,7 @@ namespace WebCRUD.API.Controllers
 
         //Post List of customers
         [HttpPost, Route("api/customer/create")]
-        public HttpResponseMessage CreateNewCustomers(List<CustomerRest> customers)
+        public async Task<HttpResponseMessage> CreateNewCustomersAsync(List<CustomerRest> customers)
         {
             List<CustomerModelEntity> customersEntity = new List<CustomerModelEntity>();
             foreach (var item in customers)
@@ -137,14 +138,14 @@ namespace WebCRUD.API.Controllers
                 customersEntity.Add(model);
             }
             CustomerService customerService = new CustomerService();
-            customerService.CreateNewCustomers(customersEntity);
+           await customerService.CreateNewCustomersAsync(customersEntity);
             return Request.CreateResponse(HttpStatusCode.OK, customers);
         }
 
 
         //Put by Id
         [HttpPut, Route("api/customer/{id}")]
-        public HttpResponseMessage EditCustomer([FromUri] int id, CustomerRest customer)
+        public async Task<HttpResponseMessage> EditCustomerAsync([FromUri] int id, CustomerRest customer)
         {
             CustomerService customerService = new CustomerService();
 
@@ -153,7 +154,7 @@ namespace WebCRUD.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Name is required");
             }
 
-            if (!customerService.CheckId(id))
+           if (! await(customerService.CheckIdAsync(id)))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
             }
@@ -169,7 +170,7 @@ namespace WebCRUD.API.Controllers
 
             try
             {
-                customerService.EditCustomer(customerEntity);
+               await customerService.EditCustomerAsync(customerEntity);
             }
             catch (Exception)
             {
@@ -179,16 +180,16 @@ namespace WebCRUD.API.Controllers
         }
         //Delete by Id
         [HttpDelete, Route("api/customer/delete/{id}")]
-        public HttpResponseMessage DeleteCustomer(int id)
+        public async Task<HttpResponseMessage> DeleteCustomerAsync(int id)
         {
             CustomerService customerService = new CustomerService();
-            if (!customerService.CheckId(id))
+            if (! await( customerService.CheckIdAsync(id)))
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
             }
             try
             {
-                customerService.DeleteCustomer(id);
+              await customerService.DeleteCustomerAsync(id);
             }
             catch (Exception)
             {

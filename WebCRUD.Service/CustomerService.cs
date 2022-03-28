@@ -11,50 +11,50 @@ namespace WebCRUD.Service
 {
     public class CustomerService: ICustomerService
     {
-        public List<CustomerModelEntity> GetAllCustomers()
+        public async Task<List<CustomerModelEntity>> GetAllCustomersAsync()
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            var customer = customerRepository.GetAllCustomer();
-            return customer;
+            var customer =await customerRepository.GetAllCustomerAsync();
+           return customer;
         }
-        public CustomerModelEntity GetCustomerById(int id)
+        public async Task<CustomerModelEntity> GetCustomerByIdAsync(int id)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            return customerRepository.GetCustomerById(id);
+            return await customerRepository.GetCustomerByIdAsync(id);
         }
-        public CustomerModelEntity GetCustomerByName(string name)
+        public async Task<CustomerModelEntity> GetCustomerByNameAsync(string name)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            return customerRepository.GetCustomerByName(name);
+            return await customerRepository.GetCustomerByNameAsync(name);
         }
-        public void CreateNewCustomer(CustomerModelEntity customer)
+        public async Task CreateNewCustomerAsync(CustomerModelEntity customer)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            customerRepository.CreateNewCustomer(customer);
+            await customerRepository.CreateNewCustomerAsync(customer);
 
         }
-        public void CreateNewCustomers(List<CustomerModelEntity> customer)
+        public async Task CreateNewCustomersAsync(List<CustomerModelEntity> customer)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            customerRepository.CreateNewCustomers(customer);
+            await customerRepository.CreateNewCustomersAsync(customer);
 
         }
-        public void EditCustomer(CustomerModelEntity customer)
+        public async Task EditCustomerAsync(CustomerModelEntity customer)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            customerRepository.EditCustomer(customer);
+            await customerRepository.EditCustomerAsync(customer);
 
         }
-        public void DeleteCustomer(int id)
+        public async Task DeleteCustomerAsync(int id)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            customerRepository.DeleteCustomer(id);
+            await customerRepository.DeleteCustomerAsync(id);
 
         }
-        public bool CheckId(int id)
+        public async Task<bool> CheckIdAsync(int id)
         {
             CustomerRepository customerRepository = new CustomerRepository();
-            return customerRepository.CheckId(id);
+            return await customerRepository.CheckIdAsync(id);
         }
 
     }
