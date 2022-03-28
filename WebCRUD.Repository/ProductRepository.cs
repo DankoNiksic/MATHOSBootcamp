@@ -45,7 +45,7 @@ namespace WebCRUD.Repository
             }
             return listProducts;
         }
-        public async  Task<ProductModelEntity> GetProductByIdAsync(int id)
+        public async Task<ProductModelEntity> GetProductByIdAsync(int id)
         {
 
             var connection = new SqlConnection(connectionString);

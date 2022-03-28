@@ -47,10 +47,15 @@ namespace WebCRUD.API.Controllers
         [HttpGet, Route("api/customer/{id}")]
         public async Task<HttpResponseMessage> GetCustomerByIdAsync(int id)
         {
+
             CustomerService customerService = new CustomerService();
             CustomerModelEntity customers;
+            if (!await (customerService.CheckIdAsync(id)))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
 
-             customers =await customerService.GetCustomerByIdAsync(id);
+            customers =await customerService.GetCustomerByIdAsync(id);
 
             CustomerRest customerrest = new CustomerRest
             {

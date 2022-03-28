@@ -47,7 +47,10 @@ namespace WebCRUD.API.Controllers
         {
             ProductService productService = new ProductService();
             ProductModelEntity products;
-
+            if (!await (productService.CheckIdAsync(id)))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, $"Id = {id} is not in database");
+            }
             products =await productService.GetProductByIdAsync(id);
 
             ProductRest productrest = new ProductRest
